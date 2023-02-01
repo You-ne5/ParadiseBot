@@ -69,30 +69,30 @@ class Client(Bot):
                 f"This command raised an exception: `{type(error)}:{str(error)}`"
             )
 
-    async def on_application_command_error(
-        self, interaction: Interaction, error: Exception
-    ) -> None:
-        if isinstance(error, application_errors.ApplicationMissingRole):
-            role = interaction.guild.get_role(int(error.missing_role))
-            await interaction.send(
-                f"The role {role.mention} is required to use this command.",
-                ephemeral=True,
-            )
-            return
+    # async def on_application_command_error(
+    #     self, interaction: Interaction, error: Exception
+    # ) -> None:
+    #     if isinstance(error, application_errors.ApplicationMissingRole):
+    #         role = interaction.guild.get_role(int(error.missing_role))
+    #         await interaction.send(
+    #             f"The role {role.mention} is required to use this command.",
+    #             ephemeral=True,
+    #         )
+    #         return
 
-        elif isinstance(error, application_errors.ApplicationMissingPermissions):
-            permissions = error.missing_permissions
-            await interaction.send(
-                f"the permission{'s' if len(permissions) > 1 else ''}: **{', '.join(permissions)}**. {'are' if len(permissions) > 1 else 'is'} required to use this command.",
-                ephemeral=True,
-            )
-            return
+    #     elif isinstance(error, application_errors.ApplicationMissingPermissions):
+    #         permissions = error.missing_permissions
+    #         await interaction.send(
+    #             f"the permission{'s' if len(permissions) > 1 else ''}: **{', '.join(permissions)}**. {'are' if len(permissions) > 1 else 'is'} required to use this command.",
+    #             ephemeral=True,
+    #         )
+    #         return
 
-        else:
-            await interaction.send(
-                f"The command has encountred an error: `{type(error)}:{str(error)}`",
-                ephemeral=True,
-            )
+    #     else:
+    #         await interaction.send(
+    #             f"The command has encountred an error: `{type(error)}:{str(error)}`",
+    #             ephemeral=True,
+    #         )
 
 
 client = Client(
