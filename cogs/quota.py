@@ -104,8 +104,10 @@ class Quota(Cog):
     async def quota_list(self,interaction: Interaction):
 
         quotasliEmbed = Embed(title="Liste des Quotas", color=Color.green())
+
         valueLi = [0,1000,1500,3000,5000,10000]
         quotasLi=[[],[],[],[],[],[]]
+
         role = interaction.guild.get_role(1070124988599910520)
 
         for member in role.members:
@@ -113,7 +115,7 @@ class Quota(Cog):
             response =  await self.curr.fetchone()
             quotas = response[0] if response else 0
  
-            quotasLi[-1 if quotas>10000 else -2 if quotas>5000 else -3 if quotas>3000 else -4 if quotas>1500 else -5 if quotas>1000 else -6].append(f"``{member.name}`` : {quotas} ")
+            quotasLi[-1 if quotas>=10000 else -2 if quotas>=5000 else -3 if quotas>=3000 else -4 if quotas>=1500 else -5 if quotas>=1000 else -6].append(f"``{member.name}`` : {quotas} ")
             
         for li in quotasLi:
             value=valueLi[quotasLi.index(li)]
@@ -122,7 +124,19 @@ class Quota(Cog):
 
         await interaction.response.send_message(embed=quotasliEmbed)
 
+    @slash_command(name="parain", description="parainer 2 employés")
+    async def parain(self, interaction: Interaction, member1: Member = SlashOption(name="member1", description="le membre à parrainer", required=True), member2: Member = SlashOption(name="member2", description="le membre auquel parrainer", required=True)):
 
+        parrainEmbed = Embed(title="Parrainage", description=f"L'employé {member1.mention} est devenu Parain de {member2.mention}. \nUne fois la période de parrainage dépassée celui-ci empochera **5 000$**.", color=Color.blue())
+
+        await interaction.response.send_message(embed=parrainEmbed)
+
+    @slash_command(name="promote", description="Promouvoir un employé")
+    async def promote(self, interaction: Interaction, member: Member = SlashOption(name="member", description="le membre à parrainer", required=True)):
+
+        promotionEmbed = Embed(title="Promotion!", description=f"L'employé {member.mention} a été promus par {interaction.user.mention}. Bravo à lui !.", color=Color.green())
+
+        await interaction.response.send_message(embed=promotionEmbed)
 
 def setup(client: Bot):
     client.add_cog(Quota(client))
